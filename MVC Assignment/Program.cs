@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using MVC_Assignment.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseInMemoryDatabase("MvcDb"));
+
 
 var app = builder.Build();
 
