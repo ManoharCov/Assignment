@@ -1,0 +1,11 @@
+﻿@model MVC_Assignment.Models.Product
+
+<h2>Product Details</h2>
+
+<p><strong>Id:</strong> @Model.Id</p>
+<p><strong>Name:</strong> @Model.Name</p>
+<p><strong>Price:</strong> ₹@Model.Price</p>
+<p><strong>Description:</strong> @Model.Description</p>
+
+
+<a asp-controller="Product" asp-action="Index">Back to List</a>
