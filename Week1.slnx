@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="Ecommerce_CodeFirst_Demo/Ecommerce_CodeFirst_Demo.csproj" Id="255f87fa-ea0d-4877-a835-b3f1e5da1962" />
+  <Project Path="Ecommerce_DBFirst/Ecommerce_DBFirst.csproj" Id="eac351af-b0f5-4921-98fa-a4d861bdb056" />
   <Project Path="genericFileException/genericFileException.csproj" Id="d32880bc-aa6b-416a-bc7a-9e2499736bd8" />
   <Project Path="MVC Assignment/MVC Assignment.csproj" Id="a3f9f820-bd87-4a6b-952e-0954692f8b63" />
   <Project Path="Week1/Week1.csproj" Id="cc9b152e-bd44-4485-abca-036cc7299206" />

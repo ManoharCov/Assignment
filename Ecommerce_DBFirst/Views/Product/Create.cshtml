@@ -1,0 +1,41 @@
+﻿@model Ecommerce_DBFirst.Models.Product
+
+<h2>Add Product</h2>
+
+<form asp-action="Create" method="post">
+
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+    </div>
+
+    <div>
+        <label asp-for="Price"></label>
+        <input asp-for="Price" />
+    </div>
+
+    <div>
+        <label asp-for="StockQuantity"></label>
+        <input asp-for="StockQuantity" />
+    </div>
+
+    <div>
+        <label asp-for="CategoryId"></label>
+
+        <select asp-for="CategoryId"
+                asp-items="@(ViewData["CategoryList"] as SelectList)">
+            <option value="">-- Select Category --</option>
+        </select>
+
+        <!-- ADD CATEGORY BUTTON -->
+        <a asp-controller="Category"
+           asp-action="Create"
+           class="btn btn-link">
+            + Add Category
+        </a>
+    </div>
+
+    <button type="submit">Save Product</button>
+</form>
+
+<a asp-action="Index">Back to List</a>
