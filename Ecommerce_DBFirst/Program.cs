@@ -7,6 +7,8 @@ builder.Services.AddDbContext<EcommerceDBContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
 builder.Services.AddControllersWithViews();
 
