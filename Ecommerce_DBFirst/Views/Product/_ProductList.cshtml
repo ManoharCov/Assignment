@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Ecommerce_DBFirst.ViewModels.ProductListVM>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@item.StockQuantity</td>
+                <td>@item.CategoryName</td>
+                <td>
+                    <a asp-controller="Product"
+                       asp-action="Details"
+                       asp-route-id="@item.ProductId">View</a> |
+
+                    <a asp-controller="Product"
+                       asp-action="Edit"
+                       asp-route-id="@item.ProductId">Edit</a> |
+
+                    <a asp-controller="Product"
+                       asp-action="Delete"
+                       asp-route-id="@item.ProductId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

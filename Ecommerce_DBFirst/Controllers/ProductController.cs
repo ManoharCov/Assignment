@@ -1,29 +1,34 @@
-﻿using Ecommerce_DBFirst.Data;
+﻿using AutoMapper;
+using Ecommerce_DBFirst.Data;
 using Ecommerce_DBFirst.Models;
+using Ecommerce_DBFirst.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
+[Route("products")]
 public class ProductController : Controller
 {
     private readonly EcommerceDBContext _context;
+    private readonly IMapper _mapper;
 
-    public ProductController(EcommerceDBContext context)
+    public ProductController(EcommerceDBContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    // LIST
+    // GET: /products
+    [HttpGet("")]
     public IActionResult Index()
     {
-        var products = _context.Products
-            .Include(p => p.Category)
-            .ToList();
-
-        return View(products);
+        var products = _context.Products.Include(p => p.Category).ToList();
+        var vm = _mapper.Map<List<ProductListVM>>(products);
+        return View(vm);
     }
 
-    // DETAILS
+    // GET: /products/details/5
+    [HttpGet("details/{id}")]
     public IActionResult Details(int id)
     {
         var product = _context.Products
@@ -33,35 +38,37 @@ public class ProductController : Controller
         return View(product);
     }
 
-    // CREATE - GET
+    // GET: /products/create
+    [HttpGet("create")]
     public IActionResult Create()
     {
         ViewData["CategoryList"] = new SelectList(
-            _context.Categories.ToList(),
+            _context.Categories,
             "CategoryId",
             "CategoryName"
         );
-
         return View();
     }
 
-    // CREATE - POST
-    [HttpPost]
+    // POST: /products/create
+    [HttpPost("create")]
     public IActionResult Create(Product product)
     {
         _context.Products.Add(product);
         _context.SaveChanges();
 
+        TempData["Success"] = "Product added successfully";
         return RedirectToAction(nameof(Index));
     }
 
-    // EDIT - GET
+    // GET: /products/edit/5
+    [HttpGet("edit/{id}")]
     public IActionResult Edit(int id)
     {
         var product = _context.Products.Find(id);
 
         ViewData["CategoryList"] = new SelectList(
-            _context.Categories.ToList(),
+            _context.Categories,
             "CategoryId",
             "CategoryName",
             product.CategoryId
@@ -70,24 +77,53 @@ public class ProductController : Controller
         return View(product);
     }
 
-    // EDIT - POST
-    [HttpPost]
+    // POST: /products/edit
+    [HttpPost("edit")]
     public IActionResult Edit(Product product)
     {
         _context.Products.Update(product);
         _context.SaveChanges();
-
         return RedirectToAction(nameof(Index));
     }
 
-    // DELETE
+    // GET: /products/delete/5
+    [HttpGet("delete/{id}")]
     public IActionResult Delete(int id)
     {
         var product = _context.Products.Find(id);
-
         _context.Products.Remove(product);
         _context.SaveChanges();
-
         return RedirectToAction(nameof(Index));
     }
+
+    // GET: /products/search
+    [HttpGet("search")]
+    public IActionResult Search(string text)
+    {
+        var products = _context.Products
+            .Include(p => p.Category)
+            .Where(p => string.IsNullOrEmpty(text) || p.Name.Contains(text))
+            .ToList();
+
+        var vm = _mapper.Map<List<ProductListVM>>(products);
+        return PartialView("_ProductList", vm);
+    }
+
+
+// /products/sort/price
+[HttpGet("sort/price")]
+    public IActionResult SortByPrice()
+    {
+        var products = _context.Products
+            .Include(p => p.Category)
+            .OrderBy(p => p.Price)
+            .ToList();
+
+        var vm = _mapper.Map<List<ProductListVM>>(products);
+
+        return View("Index", vm);
+    }
+
+
+
 }
