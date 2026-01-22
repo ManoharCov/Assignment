@@ -2,10 +2,12 @@
 using Ecommerce_DBFirst.Data;
 using Ecommerce_DBFirst.Models;
 using Ecommerce_DBFirst.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
+[Authorize]
 [Route("products")]
 public class ProductController : Controller
 {
@@ -39,6 +41,7 @@ public class ProductController : Controller
     }
 
     // GET: /products/create
+    [Authorize(Roles = "Admin")]
     [HttpGet("create")]
     public IActionResult Create()
     {
@@ -51,6 +54,7 @@ public class ProductController : Controller
     }
 
     // POST: /products/create
+    [Authorize(Roles = "Admin")]
     [HttpPost("create")]
     public IActionResult Create(Product product)
     {
@@ -62,6 +66,7 @@ public class ProductController : Controller
     }
 
     // GET: /products/edit/5
+    [Authorize(Roles = "Admin")]
     [HttpGet("edit/{id}")]
     public IActionResult Edit(int id)
     {
@@ -78,6 +83,7 @@ public class ProductController : Controller
     }
 
     // POST: /products/edit
+    [Authorize(Roles = "Admin")]
     [HttpPost("edit")]
     public IActionResult Edit(Product product)
     {
@@ -87,6 +93,7 @@ public class ProductController : Controller
     }
 
     // GET: /products/delete/5
+    [Authorize(Roles = "Admin")]
     [HttpGet("delete/{id}")]
     public IActionResult Delete(int id)
     {

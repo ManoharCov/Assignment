@@ -1,7 +1,9 @@
 ﻿using Ecommerce_DBFirst.Data;
 using Ecommerce_DBFirst.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+[Authorize(Roles = "Admin")]
 public class CategoryController : Controller
 {
     private readonly EcommerceDBContext _context;
