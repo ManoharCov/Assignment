@@ -13,17 +13,23 @@ public class ProductController : Controller
 {
     private readonly EcommerceDBContext _context;
     private readonly IMapper _mapper;
+    private readonly ILogger<ProductController> _logger;
+    private readonly IProductService _productService;
 
-    public ProductController(EcommerceDBContext context, IMapper mapper)
+    public ProductController(EcommerceDBContext context, IMapper mapper, ILogger<ProductController> logger, IProductService productService)
     {
         _context = context;
         _mapper = mapper;
+        _logger = logger;
+        _productService = productService;
     }
 
     // GET: /products
     [HttpGet("")]
     public IActionResult Index()
     {
+        _logger.LogInformation("Fetching product list");
+
         var products = _context.Products.Include(p => p.Category).ToList();
         var vm = _mapper.Map<List<ProductListVM>>(products);
         return View(vm);
@@ -58,11 +64,25 @@ public class ProductController : Controller
     [HttpPost("create")]
     public IActionResult Create(Product product)
     {
-        _context.Products.Add(product);
-        _context.SaveChanges();
 
-        TempData["Success"] = "Product added successfully";
-        return RedirectToAction(nameof(Index));
+        if(!ModelState.IsValid)
+        {
+            _logger.LogWarning("Invalid product data submitted");
+            return View(product);
+        }
+        try {
+            _context.Products.Add(product);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Product added successfully";
+            return RedirectToAction(nameof(Index));
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex, "Error adding product");
+            throw;
+        }
+
     }
 
     // GET: /products/edit/5

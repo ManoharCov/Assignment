@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
+builder.Services.AddScoped<IProductService, ProductService>();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -55,6 +57,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
+
 
 app.UseStaticFiles();
 app.UseRouting();
